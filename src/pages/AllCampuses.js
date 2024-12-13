@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom"; // Import Link for navigation
 import axios from "axios";
 
 const AllCampuses = () => {
@@ -119,14 +120,20 @@ const AllCampuses = () => {
         ) : (
           campuses.map((campus) => (
             <li key={campus.id}>
-              <h2>{campus.name}</h2>
+              <h2>
+                {/* Make the campus name clickable */}
+                <Link to={`/campuses/${campus.id}`}>{campus.name}</Link>
+              </h2>
               <p>{campus.address}</p>
               <p>{campus.description}</p>
-              <img
-                src={campus.imageUrl}
-                alt={campus.name}
-                style={{ width: "200px" }}
-              />
+              {/* Make the campus image clickable */}
+              <Link to={`/campuses/${campus.id}`}>
+                <img
+                  src={campus.imageUrl}
+                  alt={campus.name}
+                  style={{ width: "200px" }}
+                />
+              </Link>
               <button onClick={() => handleDeleteCampus(campus.id)}>
                 Delete
               </button>
