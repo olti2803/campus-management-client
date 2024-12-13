@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchStudents } from "../redux/studentsSlice"; // Redux action for fetching students
 import axios from "axios";
 
 const AllStudents = () => {
-  const [students, setStudents] = useState([]);
+  const dispatch = useDispatch();
+  const students = useSelector((state) => state.students.items); // Students from Redux state
+  const studentsStatus = useSelector((state) => state.students.status); // Fetching status from Redux
+
   const [newStudent, setNewStudent] = useState({
     firstName: "",
     lastName: "",
@@ -15,18 +20,17 @@ const AllStudents = () => {
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    // Fetch students
-    axios
-      .get("http://localhost:3001/api/students")
-      .then((response) => setStudents(response.data))
-      .catch((error) => console.error("Error fetching students:", error));
+    // Fetch students via Redux
+    if (studentsStatus === "idle") {
+      dispatch(fetchStudents());
+    }
 
     // Fetch campuses for dropdown
     axios
       .get("http://localhost:3001/api/campuses")
       .then((response) => setCampuses(response.data))
       .catch((error) => console.error("Error fetching campuses:", error));
-  }, []);
+  }, [dispatch, studentsStatus]);
 
   const handleAddStudent = () => {
     const studentToAdd = {
@@ -36,8 +40,7 @@ const AllStudents = () => {
 
     axios
       .post("http://localhost:3001/api/students", studentToAdd)
-      .then((response) => {
-        setStudents([...students, response.data]);
+      .then(() => {
         setNewStudent({
           firstName: "",
           lastName: "",
@@ -46,6 +49,7 @@ const AllStudents = () => {
           campusId: null, // Reset to null
         });
         setShowForm(false);
+        dispatch(fetchStudents()); // Refresh students in Redux
       })
       .catch((error) => console.error("Error adding student:", error));
   };
@@ -53,7 +57,9 @@ const AllStudents = () => {
   const handleDeleteStudent = (id) => {
     axios
       .delete(`http://localhost:3001/api/students/${id}`)
-      .then(() => setStudents(students.filter((student) => student.id !== id)))
+      .then(() => {
+        dispatch(fetchStudents()); // Refresh students in Redux
+      })
       .catch((error) => console.error("Error deleting student:", error));
   };
 
@@ -141,7 +147,9 @@ const AllStudents = () => {
       )}
 
       <ul>
-        {students.length === 0 ? (
+        {studentsStatus === "loading" ? (
+          <p>Loading students...</p>
+        ) : students.length === 0 ? (
           <p>No students available</p>
         ) : (
           students.map((student) => (

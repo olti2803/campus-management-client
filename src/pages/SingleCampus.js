@@ -1,109 +1,79 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchSingleCampus,
+  selectCampus,
+  selectCampusStudents,
+  deleteCampus,
+  addStudentToCampus,
+  removeStudentFromCampus,
+} from "../redux/campusesSlice";
+import {
+  fetchStudents,
+  selectUnassignedStudents,
+  addStudent,
+} from "../redux/studentsSlice";
 
 const SingleCampus = () => {
   const { id } = useParams(); // Get campus ID from the URL
-  const [campus, setCampus] = useState(null); // Store campus details
-  const [students, setStudents] = useState([]); // Store students enrolled at this campus
-  const [error, setError] = useState(null); // Handle fetch errors
-  const navigate = useNavigate(); // For navigation
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  // Redux state
+  const campus = useSelector(selectCampus);
+  const students = useSelector(selectCampusStudents);
+  const unassignedStudents = useSelector(selectUnassignedStudents);
+
+  // Local state for adding students
   const [newStudent, setNewStudent] = useState({
     firstName: "",
     lastName: "",
     email: "",
     gpa: "",
-  }); // State for adding a new student
-  const [existingStudents, setExistingStudents] = useState([]);
+  });
   const [selectedStudent, setSelectedStudent] = useState("");
 
   useEffect(() => {
-    // Fetch campus details and students
-    axios
-      .get(`http://localhost:3001/api/campuses/${id}`)
-      .then((response) => {
-        setCampus(response.data);
-        setStudents(response.data.Students || []); // Set enrolled students
-      })
-      .catch((error) => {
-        console.error("Error fetching campus details:", error);
-        setError("Failed to load campus details.");
-      });
+    dispatch(fetchSingleCampus(id)); // Fetch campus details
+    dispatch(fetchStudents()); // Fetch all students for dropdown
+  }, [dispatch, id]);
 
-    // Fetch all existing students (for dropdown)
-    axios
-      .get("http://localhost:3001/api/students")
-      .then((response) => {
-        setExistingStudents(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching students:", error);
-      });
-  }, [id]);
+  const handleDeleteCampus = () => {
+    dispatch(deleteCampus(id))
+      .unwrap()
+      .then(() => navigate("/campuses"))
+      .catch((error) => console.error("Error deleting campus:", error));
+  };
 
   const handleAddNewStudent = () => {
-    // Create a new student and assign to the campus
-    axios
-      .post("http://localhost:3001/api/students", {
-        ...newStudent,
-        campusId: id,
-      })
-      .then((response) => {
-        setStudents([...students, response.data]);
+    dispatch(addStudent({ ...newStudent, campusId: id }))
+      .unwrap()
+      .then(() => {
         setNewStudent({ firstName: "", lastName: "", email: "", gpa: "" }); // Reset form
+        dispatch(fetchSingleCampus(id)); // Refresh campus details
       })
-      .catch((error) => {
-        console.error("Error adding student:", error);
-      });
+      .catch((error) => console.error("Error adding student:", error));
   };
 
   const handleAddExistingStudent = () => {
-    // Update the selected student to assign to the campus
-    axios
-      .put(`http://localhost:3001/api/students/${selectedStudent}`, {
-        campusId: id,
-      })
-      .then((response) => {
-        setStudents([...students, response.data]);
-        setSelectedStudent(""); // Reset dropdown
-      })
-      .catch((error) => {
-        console.error("Error assigning student:", error);
-      });
-  };
-
-  const handleDeleteCampus = () => {
-    // Delete campus
-    axios
-      .delete(`http://localhost:3001/api/campuses/${id}`)
-      .then(() => {
-        navigate("/campuses"); // Redirect to All Campuses view
-      })
-      .catch((error) => {
-        console.error("Error deleting campus:", error);
-        setError("Failed to delete campus.");
-      });
+    if (selectedStudent) {
+      dispatch(addStudentToCampus({ id: selectedStudent, campusId: id }))
+        .unwrap()
+        .then(() => {
+          setSelectedStudent(""); // Reset dropdown
+          dispatch(fetchSingleCampus(id)); // Refresh campus details
+        })
+        .catch((error) => console.error("Error assigning student:", error));
+    }
   };
 
   const handleRemoveStudent = (studentId) => {
-    // Remove student from the campus
-    axios
-      .put(`http://localhost:3001/api/students/${studentId}`, {
-        campusId: null,
-      })
-      .then(() => {
-        setStudents(students.filter((student) => student.id !== studentId)); // Update local state
-      })
-      .catch((error) => {
-        console.error("Error removing student:", error);
-        setError("Failed to remove student.");
-      });
+    dispatch(removeStudentFromCampus({ studentId, campusId: null }))
+      .unwrap()
+      .then(() => dispatch(fetchSingleCampus(id))) // Refresh campus details
+      .catch((error) => console.error("Error removing student:", error));
   };
-
-  if (error) {
-    return <p>{error}</p>;
-  }
 
   if (!campus) {
     return <p>Loading...</p>;
@@ -210,13 +180,11 @@ const SingleCampus = () => {
             onChange={(e) => setSelectedStudent(e.target.value)}
           >
             <option value="">-- Select --</option>
-            {existingStudents
-              .filter((student) => !student.campusId) // Ensure only unassigned students are shown
-              .map((student) => (
-                <option key={student.id} value={student.id}>
-                  {student.firstName} {student.lastName}
-                </option>
-              ))}
+            {unassignedStudents.map((student) => (
+              <option key={student.id} value={student.id}>
+                {student.firstName} {student.lastName}
+              </option>
+            ))}
           </select>
         </label>
         <button type="submit">Assign Student</button>

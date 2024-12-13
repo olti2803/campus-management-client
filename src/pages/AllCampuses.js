@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { fetchCampuses } from "../redux/campusesSlice";
 import axios from "axios";
 
 const AllCampuses = () => {
-  const [campuses, setCampuses] = useState([]);
+  const dispatch = useDispatch();
+  const campuses = useSelector((state) => state.campuses.items); // Redux state
+  const campusesStatus = useSelector((state) => state.campuses.status); // Loading status
+
   const [showForm, setShowForm] = useState(false);
   const [newCampus, setNewCampus] = useState({
     name: "",
@@ -13,24 +18,19 @@ const AllCampuses = () => {
   });
 
   useEffect(() => {
-    // Fetch campuses from the API
-    axios
-      .get("http://localhost:3001/api/campuses")
-      .then((response) => {
-        setCampuses(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching campuses:", error);
-      });
-  }, []);
+    // Dispatch Redux action to fetch campuses
+    if (campusesStatus === "idle") {
+      dispatch(fetchCampuses());
+    }
+  }, [dispatch, campusesStatus]);
 
   const handleAddCampus = () => {
     axios
       .post("http://localhost:3001/api/campuses", newCampus)
       .then((response) => {
-        setCampuses([...campuses, response.data]); // Update UI with the new campus
         setNewCampus({ name: "", address: "", description: "", imageUrl: "" }); // Reset form
         setShowForm(false); // Hide form
+        dispatch(fetchCampuses()); // Refresh Redux state
       })
       .catch((error) => {
         console.error("Error adding campus:", error);
@@ -41,7 +41,7 @@ const AllCampuses = () => {
     axios
       .delete(`http://localhost:3001/api/campuses/${id}`)
       .then(() => {
-        setCampuses(campuses.filter((campus) => campus.id !== id)); // Update the UI
+        dispatch(fetchCampuses()); // Refresh Redux state
       })
       .catch((error) => {
         console.error("Error deleting campus:", error);
@@ -115,18 +115,18 @@ const AllCampuses = () => {
       )}
 
       <ul>
-        {campuses.length === 0 ? (
+        {campusesStatus === "loading" ? (
+          <p>Loading campuses...</p>
+        ) : campuses.length === 0 ? (
           <p>No campuses available</p>
         ) : (
           campuses.map((campus) => (
             <li key={campus.id}>
               <h2>
-                {/* Make the campus name clickable */}
                 <Link to={`/campuses/${campus.id}`}>{campus.name}</Link>
               </h2>
               <p>{campus.address}</p>
               <p>{campus.description}</p>
-              {/* Make the campus image clickable */}
               <Link to={`/campuses/${campus.id}`}>
                 <img
                   src={campus.imageUrl}
