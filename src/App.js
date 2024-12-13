@@ -3,7 +3,9 @@ import Home from "./pages/Home";
 import AllCampuses from "./pages/AllCampuses";
 import AllStudents from "./pages/AllStudents";
 import SingleCampus from "./pages/SingleCampus";
+import SingleStudent from "./pages/SingleStudent";
 import EditCampus from "./pages/EditCampus";
+import EditStudent from "./pages/EditStudent";
 import Navbar from "./components/Navbar";
 
 const App = () => {
@@ -15,7 +17,9 @@ const App = () => {
         <Route path="/campuses" element={<AllCampuses />} />
         <Route path="/students" element={<AllStudents />} />
         <Route path="/campuses/:id" element={<SingleCampus />} /> {}
+        <Route path="/students/:id" element={<SingleStudent />} />
         <Route path="/campuses/:id/edit" element={<EditCampus />} />
+        <Route path="/students/:id/edit" element={<EditStudent />} />
       </Routes>
     </Router>
   );
