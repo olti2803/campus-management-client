@@ -1,0 +1,57 @@
+.single-student-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+}
+
+.student-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.student-name {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+
+.student-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+}
+
+.edit-btn {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.delete-btn {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.student-details {
+  margin-bottom: 2rem;
+}
+
+.student-email,
+.student-gpa,
+.student-campus {
+  margin-bottom: 1rem;
+}
+
+.student-campus a {
+  color: var(--secondary-color);
+  font-weight: 500;
+}

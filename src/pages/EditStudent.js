@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/EditStudent.css";
 
 const EditStudent = () => {
   const { id } = useParams(); // Get student ID from URL
@@ -60,50 +61,62 @@ const EditStudent = () => {
   };
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className="edit-student-container">
+        <p>{error}</p>
+      </div>
+    );
   }
 
   if (!student) {
-    return <p>Loading...</p>;
+    return (
+      <div className="edit-student-container">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Edit Student</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          First Name:
+    <div className="edit-student-container">
+      <h1 className="edit-student-title">Edit Student</h1>
+      <form className="edit-student-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="firstName">First Name:</label>
           <input
+            id="firstName"
             type="text"
             name="firstName"
             value={formState.firstName}
             onChange={handleInputChange}
             required
           />
-        </label>
-        <label>
-          Last Name:
+        </div>
+        <div className="form-group">
+          <label htmlFor="lastName">Last Name:</label>
           <input
+            id="lastName"
             type="text"
             name="lastName"
             value={formState.lastName}
             onChange={handleInputChange}
             required
           />
-        </label>
-        <label>
-          Email:
+        </div>
+        <div className="form-group">
+          <label htmlFor="email">Email:</label>
           <input
+            id="email"
             type="email"
             name="email"
             value={formState.email}
             onChange={handleInputChange}
             required
           />
-        </label>
-        <label>
-          GPA:
+        </div>
+        <div className="form-group">
+          <label htmlFor="gpa">GPA:</label>
           <input
+            id="gpa"
             type="number"
             name="gpa"
             step="0.1"
@@ -112,10 +125,11 @@ const EditStudent = () => {
             value={formState.gpa}
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Campus:
+        </div>
+        <div className="form-group">
+          <label htmlFor="campusId">Campus:</label>
           <select
+            id="campusId"
             name="campusId"
             value={formState.campusId}
             onChange={handleInputChange}
@@ -127,8 +141,10 @@ const EditStudent = () => {
               </option>
             ))}
           </select>
-        </label>
-        <button type="submit">Save Changes</button>
+        </div>
+        <button className="submit-btn" type="submit">
+          Save Changes
+        </button>
       </form>
     </div>
   );

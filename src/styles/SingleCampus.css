@@ -1,0 +1,154 @@
+.single-campus-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+}
+
+.campus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.campus-title {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+
+.campus-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+}
+
+.edit-btn {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.delete-btn {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.campus-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+}
+
+.campus-details {
+  margin-bottom: 2rem;
+}
+
+.campus-address,
+.campus-description {
+  margin-bottom: 1rem;
+}
+
+.enrolled-students {
+  margin-top: 2rem;
+}
+
+.student-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.student-item {
+  background-color: var(--background-color);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+}
+
+.student-name {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.remove-student-btn {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+}
+/* Form Section Title Styling */
+.form-section-title {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin: 2rem 0 1rem 0;
+  font-weight: 600;
+}
+
+/* Form Container Styling */
+.new-student-form,
+.existing-student-form {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Form Group Styling */
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 1rem;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--secondary-color);
+  outline: none;
+}
+
+/* Button Styling */
+.form-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.form-btn:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-3px);
+}

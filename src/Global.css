@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* Root Variables */
+:root {
+  --primary-color: #6a5acd; /* Used for primary highlights */
+  --secondary-color: #4ecdc4; /* Secondary accent color */
+  --accent-color: #ff6b6b; /* Error/alert color */
+  --background-color: #f0f3f5; /* General page background */
+  --text-color: #2c3e50; /* Default text color */
+  --text-muted: #94a3b8; /* Muted text (subtitles, hints, etc.) */
+  --border-color: #e2e8f0; /* Default border color */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Small shadow */
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Medium shadow */
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1); /* Large shadow */
+  --border-radius: 0.375rem; /* Default border radius */
+}
+
+/* Reset and Box Sizing */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: "Poppins", sans-serif;
+  line-height: 1.6;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100%;
+}
+
+/* Universal Element Styling */
+a {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Default link color */
+}
+
+img {
+  max-width: 100%; /* Responsive images */
+  height: auto;
+}

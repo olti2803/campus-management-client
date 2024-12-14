@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchStudents } from "../redux/studentsSlice"; // Redux action for fetching students
 import axios from "axios";
+import "../styles/AllStudents.css";
 
 const AllStudents = () => {
   const dispatch = useDispatch();
@@ -20,12 +21,9 @@ const AllStudents = () => {
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    // Fetch students via Redux
     if (studentsStatus === "idle") {
       dispatch(fetchStudents());
     }
-
-    // Fetch campuses for dropdown
     axios
       .get("http://localhost:3001/api/campuses")
       .then((response) => setCampuses(response.data))
@@ -35,7 +33,7 @@ const AllStudents = () => {
   const handleAddStudent = () => {
     const studentToAdd = {
       ...newStudent,
-      campusId: newStudent.campusId || null, // Ensure campusId is null if not selected
+      campusId: newStudent.campusId || null,
     };
 
     axios
@@ -46,10 +44,10 @@ const AllStudents = () => {
           lastName: "",
           email: "",
           gpa: "",
-          campusId: null, // Reset to null
+          campusId: null,
         });
         setShowForm(false);
-        dispatch(fetchStudents()); // Refresh students in Redux
+        dispatch(fetchStudents());
       })
       .catch((error) => console.error("Error adding student:", error));
   };
@@ -57,109 +55,111 @@ const AllStudents = () => {
   const handleDeleteStudent = (id) => {
     axios
       .delete(`http://localhost:3001/api/students/${id}`)
-      .then(() => {
-        dispatch(fetchStudents()); // Refresh students in Redux
-      })
+      .then(() => dispatch(fetchStudents()))
       .catch((error) => console.error("Error deleting student:", error));
   };
 
   return (
-    <div>
-      <h1>All Students</h1>
-      <button onClick={() => setShowForm(!showForm)}>
-        {showForm ? "Cancel" : "Add Student"}
-      </button>
+    <div className="all-students-container">
+      <div className="all-students-header">
+        <h1 className="all-students-title">All Students</h1>
+        <button
+          className="add-student-btn"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? "Cancel" : "Add Student"}
+        </button>
+      </div>
 
       {showForm && (
         <form
+          className="add-student-form"
           onSubmit={(e) => {
             e.preventDefault();
             handleAddStudent();
           }}
         >
-          <label>
-            First Name:
-            <input
-              type="text"
-              value={newStudent.firstName}
-              onChange={(e) =>
-                setNewStudent({ ...newStudent, firstName: e.target.value })
-              }
-              required
-            />
-          </label>
-          <label>
-            Last Name:
-            <input
-              type="text"
-              value={newStudent.lastName}
-              onChange={(e) =>
-                setNewStudent({ ...newStudent, lastName: e.target.value })
-              }
-              required
-            />
-          </label>
-          <label>
-            Email:
-            <input
-              type="email"
-              value={newStudent.email}
-              onChange={(e) =>
-                setNewStudent({ ...newStudent, email: e.target.value })
-              }
-              required
-            />
-          </label>
-          <label>
-            GPA:
-            <input
-              type="number"
-              step="0.1"
-              min="0"
-              max="4"
-              value={newStudent.gpa}
-              onChange={(e) =>
-                setNewStudent({ ...newStudent, gpa: e.target.value })
-              }
-            />
-          </label>
-          <label>
-            Campus:
-            <select
-              value={newStudent.campusId || ""}
-              onChange={(e) =>
-                setNewStudent({
-                  ...newStudent,
-                  campusId: e.target.value ? parseInt(e.target.value) : null,
-                })
-              }
-            >
-              <option value="">-- None --</option>
-              {campuses.map((campus) => (
-                <option key={campus.id} value={campus.id}>
-                  {campus.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          <label>First Name:</label>
+          <input
+            type="text"
+            value={newStudent.firstName}
+            onChange={(e) =>
+              setNewStudent({ ...newStudent, firstName: e.target.value })
+            }
+            required
+          />
+          <label>Last Name:</label>
+          <input
+            type="text"
+            value={newStudent.lastName}
+            onChange={(e) =>
+              setNewStudent({ ...newStudent, lastName: e.target.value })
+            }
+            required
+          />
+          <label>Email:</label>
+          <input
+            type="email"
+            value={newStudent.email}
+            onChange={(e) =>
+              setNewStudent({ ...newStudent, email: e.target.value })
+            }
+            required
+          />
+          <label>GPA:</label>
+          <input
+            type="number"
+            step="0.1"
+            min="0"
+            max="4"
+            value={newStudent.gpa}
+            onChange={(e) =>
+              setNewStudent({ ...newStudent, gpa: e.target.value })
+            }
+          />
+          <label>Campus:</label>
+          <select
+            value={newStudent.campusId || ""}
+            onChange={(e) =>
+              setNewStudent({
+                ...newStudent,
+                campusId: e.target.value ? parseInt(e.target.value) : null,
+              })
+            }
+          >
+            <option value="">-- None --</option>
+            {campuses.map((campus) => (
+              <option key={campus.id} value={campus.id}>
+                {campus.name}
+              </option>
+            ))}
+          </select>
           <button type="submit">Add Student</button>
         </form>
       )}
 
-      <ul>
+      <ul className="student-list">
         {studentsStatus === "loading" ? (
           <p>Loading students...</p>
         ) : students.length === 0 ? (
           <p>No students available</p>
         ) : (
           students.map((student) => (
-            <li key={student.id}>
-              <Link to={`/students/${student.id}`}>
-                {student.firstName} {student.lastName}
-              </Link>
-              <button onClick={() => handleDeleteStudent(student.id)}>
-                Delete
-              </button>
+            <li className="student-item" key={student.id}>
+              <h2 className="student-name">
+                <Link to={`/students/${student.id}`}>
+                  {student.firstName} {student.lastName}
+                </Link>
+              </h2>
+              <p className="student-email">{student.email}</p>
+              <div className="student-actions">
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDeleteStudent(student.id)}
+                >
+                  Delete
+                </button>
+              </div>
             </li>
           ))
         )}

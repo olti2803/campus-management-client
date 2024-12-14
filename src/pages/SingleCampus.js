@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import "../styles/SingleCampus.css";
+
 import {
   fetchSingleCampus,
   selectCampus,
@@ -80,45 +82,57 @@ const SingleCampus = () => {
   }
 
   return (
-    <div>
-      <h1>{campus.name}</h1>
-      <p>Address: {campus.address}</p>
-      <p>Description: {campus.description}</p>
-      <img src={campus.imageUrl} alt={campus.name} style={{ width: "300px" }} />
+    <div className="single-campus-container">
+      <div className="campus-header">
+        <h1 className="campus-title">{campus.name}</h1>
+        <div className="campus-actions">
+          <button className="delete-btn" onClick={handleDeleteCampus}>
+            Delete Campus
+          </button>
+          <Link to={`/campuses/${id}/edit`} className="edit-btn">
+            Edit Campus
+          </Link>
+        </div>
+      </div>
+      <img src={campus.imageUrl} alt={campus.name} className="campus-image" />
+      <div className="campus-details">
+        <p className="campus-address">Address: {campus.address}</p>
+        <p className="campus-description">Description: {campus.description}</p>
+      </div>
 
-      <button onClick={handleDeleteCampus}>Delete Campus</button>
-      <Link to={`/campuses/${id}/edit`}>Edit Campus</Link>
+      <div className="enrolled-students">
+        <h2>Enrolled Students</h2>
+        {students.length === 0 ? (
+          <p>No students enrolled at this campus.</p>
+        ) : (
+          <div className="student-list">
+            {students.map((student) => (
+              <div key={student.id} className="student-item">
+                <Link to={`/students/${student.id}`} className="student-name">
+                  {student.firstName} {student.lastName}
+                </Link>
+                <button
+                  className="remove-student-btn"
+                  onClick={() => handleRemoveStudent(student.id)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-      <h2>Enrolled Students</h2>
-      {students.length === 0 ? (
-        <p>No students enrolled at this campus.</p>
-      ) : (
-        <ul>
-          {students.map((student) => (
-            <li key={student.id}>
-              <Link to={`/students/${student.id}`}>
-                {student.firstName} {student.lastName}
-              </Link>
-              <button
-                onClick={() => handleRemoveStudent(student.id)}
-                style={{ marginLeft: "10px" }}
-              >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <h3>Add a New Student</h3>
+      <h3 className="form-section-title">Add a New Student</h3>
       <form
+        className="new-student-form"
         onSubmit={(e) => {
           e.preventDefault();
           handleAddNewStudent();
         }}
       >
-        <label>
-          First Name:
+        <div className="form-group">
+          <label>First Name:</label>
           <input
             type="text"
             value={newStudent.firstName}
@@ -127,9 +141,9 @@ const SingleCampus = () => {
             }
             required
           />
-        </label>
-        <label>
-          Last Name:
+        </div>
+        <div className="form-group">
+          <label>Last Name:</label>
           <input
             type="text"
             value={newStudent.lastName}
@@ -138,9 +152,9 @@ const SingleCampus = () => {
             }
             required
           />
-        </label>
-        <label>
-          Email:
+        </div>
+        <div className="form-group">
+          <label>Email:</label>
           <input
             type="email"
             value={newStudent.email}
@@ -149,9 +163,9 @@ const SingleCampus = () => {
             }
             required
           />
-        </label>
-        <label>
-          GPA:
+        </div>
+        <div className="form-group">
+          <label>GPA:</label>
           <input
             type="number"
             step="0.1"
@@ -162,19 +176,22 @@ const SingleCampus = () => {
               setNewStudent({ ...newStudent, gpa: e.target.value })
             }
           />
-        </label>
-        <button type="submit">Add Student</button>
+        </div>
+        <button className="form-btn" type="submit">
+          Add Student
+        </button>
       </form>
 
-      <h3>Assign an Existing Student</h3>
+      <h3 className="form-section-title">Assign an Existing Student</h3>
       <form
+        className="existing-student-form"
         onSubmit={(e) => {
           e.preventDefault();
           handleAddExistingStudent();
         }}
       >
-        <label>
-          Select Student:
+        <div className="form-group">
+          <label>Select Student:</label>
           <select
             value={selectedStudent}
             onChange={(e) => setSelectedStudent(e.target.value)}
@@ -186,8 +203,10 @@ const SingleCampus = () => {
               </option>
             ))}
           </select>
-        </label>
-        <button type="submit">Assign Student</button>
+        </div>
+        <button className="form-btn" type="submit">
+          Assign Student
+        </button>
       </form>
     </div>
   );

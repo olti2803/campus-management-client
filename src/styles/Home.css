@@ -1,0 +1,187 @@
+/* Home.css */
+
+/* Overall container for the home page */
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  background-color: #f9f9fc;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+/* Header section styling */
+.home-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.home-header h1 {
+  font-size: 2.8rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  font-weight: 600;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 1s ease-in-out;
+  margin-bottom: 0.8rem;
+}
+
+.home-header p {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin: 0 auto;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+/* Animation for smooth text entry */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Actions section with cards */
+.home-actions {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  ); /* Responsive grid */
+  gap: 2rem; /* Space between cards */
+  justify-content: center;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+/* Styling for individual cards */
+.card {
+  background-color: #ffffff;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  width: 100%; /* Dynamically adjust width */
+  max-width: 100%;
+}
+
+/* Hover effect for cards */
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Card title styling */
+.card h2 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+/* Card description styling */
+.card p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0 auto;
+  max-width: 280px; /* Ensures text remains contained */
+}
+
+/* Card icon styling */
+.card .icon {
+  font-size: 2.5rem; /* Larger icon size for balance */
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Icon hover effect */
+.card:hover .icon {
+  transform: scale(1.1);
+  color: var(--accent-color);
+}
+
+/* Decorative gradient effect on hover */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  z-index: 0;
+  transition: height 0.3s ease;
+}
+
+.card:hover::before {
+  height: 100%;
+  z-index: -1;
+  border-radius: var(--border-radius-lg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .home-actions {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .card h2 {
+    font-size: 1.6rem;
+  }
+
+  .card .icon {
+    font-size: 2rem;
+  }
+
+  .card p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .home-header h1 {
+    font-size: 2.3rem;
+  }
+
+  .home-header p {
+    font-size: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .card h2 {
+    font-size: 1.5rem;
+  }
+
+  .card .icon {
+    font-size: 1.8rem;
+  }
+
+  .home-actions {
+    gap: 1rem;
+  }
+}

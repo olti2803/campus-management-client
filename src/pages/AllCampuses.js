@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchCampuses } from "../redux/campusesSlice";
 import axios from "axios";
+import "../Global.css";
+import "../styles/AllCampuses.css";
 
 const AllCampuses = () => {
   const dispatch = useDispatch();
@@ -49,14 +51,17 @@ const AllCampuses = () => {
   };
 
   return (
-    <div>
-      <h1>All Campuses</h1>
-      <button onClick={() => setShowForm(!showForm)}>
+    <div className="all-campuses-container">
+      <h1 className="all-campuses-title">All Campuses</h1>
+      <button
+        className="add-campus-toggle"
+        onClick={() => setShowForm(!showForm)}
+      >
         {showForm ? "Cancel" : "Add Campus"}
       </button>
 
       {showForm && (
-        <div>
+        <div className="add-campus-form">
           <h2>Add a New Campus</h2>
           <form
             onSubmit={(e) => {
@@ -75,7 +80,6 @@ const AllCampuses = () => {
                 required
               />
             </label>
-            <br />
             <label>
               Address:
               <input
@@ -87,7 +91,6 @@ const AllCampuses = () => {
                 required
               />
             </label>
-            <br />
             <label>
               Description:
               <textarea
@@ -97,7 +100,6 @@ const AllCampuses = () => {
                 }
               ></textarea>
             </label>
-            <br />
             <label>
               Image URL:
               <input
@@ -108,33 +110,37 @@ const AllCampuses = () => {
                 }
               />
             </label>
-            <br />
             <button type="submit">Submit</button>
           </form>
         </div>
       )}
 
-      <ul>
+      <ul className="all-campuses-grid">
         {campusesStatus === "loading" ? (
           <p>Loading campuses...</p>
         ) : campuses.length === 0 ? (
           <p>No campuses available</p>
         ) : (
           campuses.map((campus) => (
-            <li key={campus.id}>
+            <li key={campus.id} className="all-campuses-card">
               <h2>
-                <Link to={`/campuses/${campus.id}`}>{campus.name}</Link>
+                <Link to={`/campuses/${campus.id}`} className="campus-link">
+                  {campus.name}
+                </Link>
               </h2>
-              <p>{campus.address}</p>
-              <p>{campus.description}</p>
+              <p className="campus-address">{campus.address}</p>
+              <p className="campus-description">{campus.description}</p>
               <Link to={`/campuses/${campus.id}`}>
                 <img
                   src={campus.imageUrl}
                   alt={campus.name}
-                  style={{ width: "200px" }}
+                  className="campus-image"
                 />
               </Link>
-              <button onClick={() => handleDeleteCampus(campus.id)}>
+              <button
+                className="delete-campus-button"
+                onClick={() => handleDeleteCampus(campus.id)}
+              >
                 Delete
               </button>
             </li>

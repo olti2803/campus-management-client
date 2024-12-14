@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/SingleStudent.css";
 
 const SingleStudent = () => {
   const { id } = useParams(); // Get student ID from URL
@@ -31,32 +32,52 @@ const SingleStudent = () => {
   };
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className="single-student-container">
+        <p>{error}</p>
+      </div>
+    );
   }
 
   if (!student) {
-    return <p>Loading...</p>;
+    return (
+      <div className="single-student-container">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>
-        {student.firstName} {student.lastName}
-      </h1>
-      <p>Email: {student.email}</p>
-      <p>GPA: {student.gpa}</p>
-      {student.Campus ? (
-        <p>
-          Enrolled in:{" "}
-          <Link to={`/campuses/${student.Campus.id}`}>
-            {student.Campus.name}
+    <div className="single-student-container">
+      <div className="student-header">
+        <h1 className="student-name">
+          {student.firstName} {student.lastName}
+        </h1>
+        <div className="student-actions">
+          <button className="delete-btn" onClick={handleDeleteStudent}>
+            Delete Student
+          </button>
+          <Link to={`/students/${id}/edit`} className="edit-btn">
+            Edit Student
           </Link>
-        </p>
-      ) : (
-        <p>This student is not enrolled in any campus.</p>
-      )}
-      <button onClick={handleDeleteStudent}>Delete Student</button>
-      <Link to={`/students/${id}/edit`}>Edit Student</Link>
+        </div>
+      </div>
+      <div className="student-details">
+        <p className="student-email">Email: {student.email}</p>
+        <p className="student-gpa">GPA: {student.gpa}</p>
+        {student.Campus ? (
+          <p className="student-campus">
+            Enrolled in:{" "}
+            <Link to={`/campuses/${student.Campus.id}`}>
+              {student.Campus.name}
+            </Link>
+          </p>
+        ) : (
+          <p className="student-campus">
+            This student is not enrolled in any campus.
+          </p>
+        )}
+      </div>
     </div>
   );
 };

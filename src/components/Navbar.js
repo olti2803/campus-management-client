@@ -1,17 +1,22 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { NavLink } from "react-router-dom";
+import "../styles/Navbar.css";
 
 const Navbar = () => {
   return (
-    <nav style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
-      <Link to="/" style={{ margin: "0 10px" }}>
-        Home
-      </Link>
-      <Link to="/campuses" style={{ margin: "0 10px" }}>
-        Campuses
-      </Link>
-      <Link to="/students" style={{ margin: "0 10px" }}>
-        Students
-      </Link>
+    <nav className="navbar">
+      <h1 className="navbar-title">Campus Management</h1>
+      <div className="navbar-links">
+        <NavLink exact to="/" activeClassName="active">
+          Home
+        </NavLink>
+        <NavLink to="/campuses" activeClassName="active">
+          All Campuses
+        </NavLink>
+        <NavLink to="/students" activeClassName="active">
+          All Students
+        </NavLink>
+      </div>
     </nav>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/EditCampus.css";
 
 const EditCampus = () => {
   const { id } = useParams(); // Campus ID from URL
@@ -32,57 +33,67 @@ const EditCampus = () => {
   };
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className="edit-campus-container">
+        <p>{error}</p>
+      </div>
+    );
   }
 
   if (!campus) {
-    return <p>Loading...</p>;
+    return (
+      <div className="edit-campus-container">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Edit Campus</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
+    <div className="edit-campus-container">
+      <h1 className="edit-campus-title">Edit Campus</h1>
+      <form className="edit-campus-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="name">Name:</label>
           <input
+            id="name"
             type="text"
             value={campus.name}
             onChange={(e) => setCampus({ ...campus, name: e.target.value })}
             required
           />
-        </label>
-        <br />
-        <label>
-          Address:
+        </div>
+        <div className="form-group">
+          <label htmlFor="address">Address:</label>
           <input
+            id="address"
             type="text"
             value={campus.address}
             onChange={(e) => setCampus({ ...campus, address: e.target.value })}
             required
           />
-        </label>
-        <br />
-        <label>
-          Description:
+        </div>
+        <div className="form-group">
+          <label htmlFor="description">Description:</label>
           <textarea
+            id="description"
             value={campus.description}
             onChange={(e) =>
               setCampus({ ...campus, description: e.target.value })
             }
           ></textarea>
-        </label>
-        <br />
-        <label>
-          Image URL:
+        </div>
+        <div className="form-group">
+          <label htmlFor="imageUrl">Image URL:</label>
           <input
+            id="imageUrl"
             type="url"
             value={campus.imageUrl}
             onChange={(e) => setCampus({ ...campus, imageUrl: e.target.value })}
           />
-        </label>
-        <br />
-        <button type="submit">Update Campus</button>
+        </div>
+        <button className="submit-btn" type="submit">
+          Update Campus
+        </button>
       </form>
     </div>
   );
